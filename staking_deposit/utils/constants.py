@@ -14,8 +14,10 @@ BLS_WITHDRAWAL_PREFIX = bytes.fromhex('00')
 ETH1_ADDRESS_WITHDRAWAL_PREFIX = bytes.fromhex('01')
 
 ETH2GWEI = 10 ** 9
+# 1 Over
 MIN_DEPOSIT_AMOUNT = 2 ** 0 * ETH2GWEI
-MAX_DEPOSIT_AMOUNT = 2 ** 5 * ETH2GWEI
+# 256 Over
+MAX_DEPOSIT_AMOUNT = 2 ** 8 * ETH2GWEI
 
 
 # File/folder constants

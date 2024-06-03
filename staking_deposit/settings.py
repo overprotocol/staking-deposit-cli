@@ -15,6 +15,8 @@ GOERLI = 'goerli'
 PRATER = 'prater'
 SEPOLIA = 'sepolia'
 ZHEJIANG = 'zhejiang'
+OVER = 'over'
+OVER_DOLPHIN = 'over_dolphin'
 
 # Mainnet setting
 MainnetSetting = BaseChainSetting(
@@ -32,14 +34,22 @@ SepoliaSetting = BaseChainSetting(
 ZhejiangSetting = BaseChainSetting(
     NETWORK_NAME=ZHEJIANG, GENESIS_FORK_VERSION=bytes.fromhex('00000069'),
     GENESIS_VALIDATORS_ROOT=bytes.fromhex('53a92d8f2bb1d85f62d16a156e6ebcd1bcaba652d0900b2c2f387826f3481f6f'))
+# Over Setting
+OverSetting = BaseChainSetting(
+    NETWORK_NAME=OVER, GENESIS_FORK_VERSION=bytes.fromhex('00000018'),
+    # TODO: Add Over validators root
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex('0000000000000000000000000000000000000000000000000000000000000000'))
+# Over Dolphin Setting
+OverDolphinSetting = BaseChainSetting(
+    NETWORK_NAME=OVER_DOLPHIN, GENESIS_FORK_VERSION=bytes.fromhex('00000028'),
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex('2ee0bb8642da65b6ae98571cf5d927418a0953f26b159ee23ad2d0e0aec51efa'))
+
 
 
 ALL_CHAINS: Dict[str, BaseChainSetting] = {
     MAINNET: MainnetSetting,
-    GOERLI: GoerliSetting,
-    PRATER: GoerliSetting,  # Prater is the old name of the Prater/Goerli testnet
-    SEPOLIA: SepoliaSetting,
-    ZHEJIANG: ZhejiangSetting,
+    OVER: OverSetting,
+    OVER_DOLPHIN: OverDolphinSetting,
 }
 
 
