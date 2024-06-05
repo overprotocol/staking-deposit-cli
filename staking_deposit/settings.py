@@ -42,7 +42,7 @@ OverSetting = BaseChainSetting(
 # Over Dolphin Setting
 OverDolphinSetting = BaseChainSetting(
     NETWORK_NAME=OVER_DOLPHIN, GENESIS_FORK_VERSION=bytes.fromhex('00000028'),
-    GENESIS_VALIDATORS_ROOT=bytes.fromhex('2ee0bb8642da65b6ae98571cf5d927418a0953f26b159ee23ad2d0e0aec51efa'))
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex('24246b8eb8d861c49bf57c6b6d46c721a83be2462ac7a6a2f7f9e8480e637e54'))
 
 
 
