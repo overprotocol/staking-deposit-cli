@@ -1,7 +1,7 @@
 from typing import Dict, NamedTuple
 from eth_utils import decode_hex
 
-DEPOSIT_CLI_VERSION = '2.5.0'
+DEPOSIT_CLI_VERSION = '2.6.0'
 
 
 class BaseChainSetting(NamedTuple):
@@ -37,8 +37,7 @@ ZhejiangSetting = BaseChainSetting(
 # Over Setting
 OverSetting = BaseChainSetting(
     NETWORK_NAME=OVER, GENESIS_FORK_VERSION=bytes.fromhex('00000018'),
-    # TODO: Add Over validators root
-    GENESIS_VALIDATORS_ROOT=bytes.fromhex('0000000000000000000000000000000000000000000000000000000000000000'))
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex('f9eb4a592b6bae41d4e8b042a0a94fd67c1760aa05f60c03b8b2f94406e9d79c'))
 # Over Dolphin Setting
 OverDolphinSetting = BaseChainSetting(
     NETWORK_NAME=OVER_DOLPHIN, GENESIS_FORK_VERSION=bytes.fromhex('00000028'),
