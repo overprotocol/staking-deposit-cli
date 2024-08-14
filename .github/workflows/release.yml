@@ -153,7 +153,7 @@ jobs:
             | Windows amd64 | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.zip](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ steps.set_tag_name.outputs.tag_name }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.zip) | ${{ needs.build_windows.outputs.shasum_result }} |
 
 
-            **Full Changelog**: https://github.com/overprotocol/staking-deposit-cli/commits/${{ github.ref }}
+            **Full Changelog**: https://github.com/overprotocol/staking-deposit-cli/commits/${{ steps.set_tag_name.outputs.tag_name }}
 
   upload_assets:
     needs: [release]
