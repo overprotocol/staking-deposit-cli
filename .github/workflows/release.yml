@@ -157,11 +157,11 @@ jobs:
       matrix:
         include:
           - platform: linux
-            file: staking_deposit-cli-${{ needs.set_sha_short.outputs.sha_short }}-linux-amd64.tar.gz
+            file: staking_deposit-cli-${{ needs.release.outputs.sha_short }}-linux-amd64.tar.gz
           - platform: macos
-            file: staking_deposit-cli-${{ needs.set_sha_short.outputs.sha_short }}-macos.tar.gz
+            file: staking_deposit-cli-${{ needs.release.outputs.sha_short }}-macos.tar.gz
           - platform: windows
-            file: staking_deposit-cli-${{ needs.set_sha_short.outputs.sha_short }}-windows-amd64.zip
+            file: staking_deposit-cli-${{ needs.release.outputs.sha_short }}-windows-amd64.zip
 
     steps:
       - name: Download build artifacts (${{ matrix.platform }})
