@@ -5,6 +5,9 @@ on:
     tags:
       - "*"
 
+permissions:
+  contents: write
+
 jobs:
   build_linux:
     runs-on: ubuntu-latest
@@ -23,18 +26,23 @@ jobs:
           mkdir ${BUILD_FILE_NAME}
           pyinstaller --distpath ./dist/${BUILD_FILE_NAME} ./build_configs/linux/build.spec
       - name: Compress the file
+        id: compress_file
         run: |
           export GITHUB_SHA_SHORT=${GITHUB_SHA::7}
           export BUILD_FILE_NAME=staking_deposit-cli-${GITHUB_SHA_SHORT}-linux-amd64
           tar -zcvf ${BUILD_FILE_NAME}.tar.gz ./dist/${BUILD_FILE_NAME}
           mkdir -p ./build/linux
           cp ${BUILD_FILE_NAME}.tar.gz ./build/linux
-          sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64 > ./build/linux/${BUILD_FILE_NAME}.sha256
+          shasum_result=$(sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64)
+          echo "shasum_result=${shasum_result}" >> $GITHUB_OUTPUT
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: build-linux
           path: ./build/linux
+    outputs:
+      shasum_result: ${{ steps.compress_file.outputs.shasum_result }}
+
   build_macos:
     runs-on: macos-14
     steps:
@@ -52,18 +60,23 @@ jobs:
           mkdir ${BUILD_FILE_NAME}
           pyinstaller --distpath ./dist/${BUILD_FILE_NAME} ./build_configs/macos/build.spec
       - name: Compress the file
+        id: compress_file
         run: |
           export GITHUB_SHA_SHORT=${GITHUB_SHA::7}
           export BUILD_FILE_NAME=staking_deposit-cli-${GITHUB_SHA_SHORT}-macos
           tar -zcvf ${BUILD_FILE_NAME}.tar.gz ./dist/${BUILD_FILE_NAME}
           mkdir -p ./build/macos
           cp ${BUILD_FILE_NAME}.tar.gz ./build/macos
-          shasum -a 256 ${BUILD_FILE_NAME}.tar.gz | head -c 64 > ./build/macos/${BUILD_FILE_NAME}.sha256
+          shasum_result=$(shasum -a 256 ${BUILD_FILE_NAME}.tar.gz | head -c 64)
+          echo "shasum_result=${shasum_result}" >> $GITHUB_OUTPUT
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: build-macos
           path: ./build/macos
+    outputs:
+      shasum_result: ${{ steps.compress_file.outputs.shasum_result }}
+
   build_windows:
     runs-on: windows-latest
     steps:
@@ -82,6 +95,7 @@ jobs:
           $BUILD_FILE_NAME_PATH = ".\dist\" + $BUILD_FILE_NAME
           pyinstaller --distpath $BUILD_FILE_NAME_PATH .\build_configs\windows\build.spec
       - name: Compress the file
+        id: compress_file
         run: |
           $PYTHONHASHSEED = 42
           $GITHUB_SHA_SHORT = $env:GITHUB_SHA.Substring(0,7)
@@ -91,18 +105,32 @@ jobs:
           Compress-Archive -Path $BUILD_FILE_NAME_PATH -DestinationPath $ZIP_FILE_NAME
           mkdir .\build\windows
           copy $ZIP_FILE_NAME .\build\windows
-          Get-FileHash $ZIP_FILE_NAME -Algorithm SHA256 | Select-Object -ExpandProperty Hash | Set-Content -Path .\build\windows\$BUILD_FILE_NAME.sha256
+          $SHA_RESULT = Get-FileHash $ZIP_FILE_NAME -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+          echo "shasum_result=${SHA_RESULT}" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: build-windows
           path: ./build/windows
+    outputs:
+      shasum_result: ${{ steps.compress_file.outputs.shasum_result }}
+
   release:
     needs: [build_linux, build_macos, build_windows]
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
+      sha_short: ${{ steps.set_sha_short.outputs.sha_short }}
     steps:
+      - uses: actions/checkout@v4
+      - name: Set sha_short
+        id: set_sha_short
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Set tag_name
+        id: set_tag_name
+        run: echo "tag_name=$(git describe --tags)" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -111,51 +139,34 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: |
-            ## Changes
-            - Summary of the changes in this release.
-
-            <EDIT ME>
           draft: false
           prerelease: false
+          body: |
+            ### Release Artifacts
 
-  set_filenames:
-    needs: [release]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set filenames
-        id: set_filenames
-        run: |
-          export GITHUB_SHA_SHORT=${GITHUB_SHA::7}
-          echo "::set-output name=linux_amd64_file::staking_deposit-cli-${GITHUB_SHA_SHORT}-linux-amd64.tar.gz"
-          echo "::set-output name=linux_amd64_file_sha256::staking_deposit-cli-${GITHUB_SHA_SHORT}-linux-amd64.sha256"
-          echo "::set-output name=macos_file::staking_deposit-cli-${GITHUB_SHA_SHORT}-macos.tar.gz"
-          echo "::set-output name=macos_file_sha256::staking_deposit-cli-${GITHUB_SHA_SHORT}-macos.sha256"
-          echo "::set-output name=windows_file::staking_deposit-cli-${GITHUB_SHA_SHORT}-windows-amd64.zip"
-          echo "::set-output name=windows_file_sha256::staking_deposit-cli-${GITHUB_SHA_SHORT}-windows-amd64.sha256"
-    outputs:
-      linux_amd64_file: ${{ steps.set_filenames.outputs.linux_amd64_file }}
-      linux_amd64_file_sha256: ${{ steps.set_filenames.outputs.linux_amd64_file_sha256 }}
-      macos_file: ${{ steps.set_filenames.outputs.macos_file }}
-      macos_file_sha256: ${{ steps.set_filenames.outputs.macos_file_sha256 }}
-      windows_file: ${{ steps.set_filenames.outputs.windows_file }}
-      windows_file_sha256: ${{ steps.set_filenames.outputs.windows_file_sha256 }}
+            You can find the binary executable files under assets below.
+
+            | Platform      | Compressed file                                  | SHA256 Checksum                                                  |
+            | ------------- | ------------------------------------------------ | ---------------------------------------------------------------- |
+            | macOS amd64   | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-macos.tar.gz](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ steps.set_tag_name.outputs.tag_name }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-macos.tar.gz)         | ${{ needs.build_macos.outputs.shasum_result }} |
+            | Linux amd64   | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-linux-amd64.tar.gz](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ steps.set_tag_name.outputs.tag_name }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-linux-amd64.tar.gz)   | ${{ needs.build_linux.outputs.shasum_result }} |
+            | Windows amd64 | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.zip](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ steps.set_tag_name.outputs.tag_name }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.zip) | ${{ needs.build_windows.outputs.shasum_result }} |
+
+
+            **Full Changelog**: https://github.com/overprotocol/staking-deposit-cli/commits/${{ steps.set_tag_name.outputs.tag_name }}
 
   upload_assets:
-    needs: [release, set_filenames]
+    needs: [release]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
           - platform: linux
-            file: ${{ needs.set_filenames.outputs.linux_amd64_file }}
-            file_sha256: ${{ needs.set_filenames.outputs.linux_amd64_file_sha256 }}
+            file: staking_deposit-cli-${{ needs.release.outputs.sha_short }}-linux-amd64.tar.gz
           - platform: macos
-            file: ${{ needs.set_filenames.outputs.macos_file }}
-            file_sha256: ${{ needs.set_filenames.outputs.macos_file_sha256 }}
+            file: staking_deposit-cli-${{ needs.release.outputs.sha_short }}-macos.tar.gz
           - platform: windows
-            file: ${{ needs.set_filenames.outputs.windows_file }}
-            file_sha256: ${{ needs.set_filenames.outputs.windows_file_sha256 }}
+            file: staking_deposit-cli-${{ needs.release.outputs.sha_short }}-windows-amd64.zip
 
     steps:
       - name: Download build artifacts (${{ matrix.platform }})
@@ -172,14 +183,4 @@ jobs:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: ./build/${{ matrix.platform }}/${{ matrix.file }}
           asset_name: ${{ matrix.file }}
-          asset_content_type: application/octet-stream
-
-      - name: Upload Release Assets SHA256 (${{ matrix.platform }})
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: ./build/${{ matrix.platform }}/${{ matrix.file_sha256 }}
-          asset_name: ${{ matrix.file_sha256 }}
           asset_content_type: application/octet-stream
