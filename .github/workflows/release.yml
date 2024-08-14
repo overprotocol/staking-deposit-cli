@@ -44,7 +44,7 @@ jobs:
       shasum_result: ${{ steps.compress_file.outputs.shasum_result }}
 
   build_macos:
-    runs-on: macos-14
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
