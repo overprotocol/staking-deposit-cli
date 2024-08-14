@@ -127,6 +127,10 @@ jobs:
         id: set_sha_short
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
+      - name: Set tag_name
+        id: set_tag_name
+        run: echo "tag_name=$(git describe --tags)" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
@@ -144,9 +148,9 @@ jobs:
 
             | Platform      | Compressed file                                  | SHA256 Checksum                                                  |
             | ------------- | ------------------------------------------------ | ---------------------------------------------------------------- |
-            | macOS amd64   | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-macos.tar.gz](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ github.ref }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-macos.tar.gz)         | ${{ needs.build_macos.outputs.shasum_result }} |
-            | Linux amd64   | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-linux-amd64.tar.gz](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ github.ref }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-linux-amd64.tar.gz)   | ${{ needs.build_linux.outputs.shasum_result }} |
-            | Windows amd64 | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.tar.gz](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ github.ref }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.tar.gz) | ${{ needs.build_windows.outputs.shasum_result }} |
+            | macOS amd64   | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-macos.tar.gz](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ steps.set_tag_name.outputs.tag_name }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-macos.tar.gz)         | ${{ needs.build_macos.outputs.shasum_result }} |
+            | Linux amd64   | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-linux-amd64.tar.gz](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ steps.set_tag_name.outputs.tag_name }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-linux-amd64.tar.gz)   | ${{ needs.build_linux.outputs.shasum_result }} |
+            | Windows amd64 | [staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.zip](https://github.com/overprotocol/staking-deposit-cli/releases/download/${{ steps.set_tag_name.outputs.tag_name }}/staking_deposit-cli-${{ steps.set_sha_short.outputs.sha_short }}-windows-amd64.zip) | ${{ needs.build_windows.outputs.shasum_result }} |
 
 
             **Full Changelog**: https://github.com/overprotocol/staking-deposit-cli/commits/${{ github.ref }}
