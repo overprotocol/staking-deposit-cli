@@ -122,6 +122,7 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       sha_short: ${{ steps.set_sha_short.outputs.sha_short }}
     steps:
+      - uses: actions/checkout@v4
       - name: Set sha_short
         id: set_sha_short
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
