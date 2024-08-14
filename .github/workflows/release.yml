@@ -33,7 +33,7 @@ jobs:
           tar -zcvf ${BUILD_FILE_NAME}.tar.gz ./dist/${BUILD_FILE_NAME}
           mkdir -p ./build/linux
           cp ${BUILD_FILE_NAME}.tar.gz ./build/linux
-          shasum_result= $(sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64)
+          shasum_result=$(sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64)
           echo "shasum_result=${shasum_result}" >> $GITHUB_OUTPUT
       - name: Upload artifact
         uses: actions/upload-artifact@v2
