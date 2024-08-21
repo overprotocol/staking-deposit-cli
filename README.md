@@ -315,8 +315,7 @@ See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
 See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
 See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
 
-<!-- TODO: Support Docker image option -->
-<!-- #### Option 4. Use Docker image
+#### Option 4. Use Docker image
 
 ##### Step 1. Build the docker image
 
@@ -331,26 +330,26 @@ make build_docker
 Run the following command to enter the interactive CLI:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/staking-deposit-cli
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys overfoundation/staking-deposit-cli
 ```
 
 You can also run the tool with optional arguments:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/staking-deposit-cli new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --folder=<YOUR_FOLDER_PATH>
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys overfoundation/staking-deposit-cli new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --folder=<YOUR_FOLDER_PATH>
 ```
 
-Example for 1 validator on the [Prater testnet](https://prater.launchpad.ethereum.org/) using english:
+Example for 1 validator on the Dolphin testnet using english:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/staking-deposit-cli new-mnemonic --num_validators=1 --mnemonic_language=english --chain=prater
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys overfoundation/staking-deposit-cli new-mnemonic --num_validators=1 --mnemonic_language=english --chain=over_dolphin
 ```
 
 ###### Arguments
 See [here](#arguments)
 
 ###### Successful message
-See [here](#successful-message) -->
+See [here](#successful-message)
 
 ----
 
