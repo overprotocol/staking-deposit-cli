@@ -5,8 +5,8 @@
             "prompt": "Veuillez choisir le nombre de validateurs que vous souhaitez exécuter"
         },
         "chain": {
-            "help": "Version Ethereum Proof of Stake que vous ciblez. Utilisez \"mainnet\" si vous déposez de l'ETH.",
-            "prompt": "Veuillez choisir un nom de chaîne/réseau : mainnet (réseau principal) ou testnet (réseau de test)."
+            "help": "Version Over Proof of Stake que vous ciblez. Utilisez \"over\" si vous déposez de l'OVER.",
+            "prompt": "Veuillez choisir un nom de chaîne/réseau : over (réseau principal) ou testnet (réseau de test)."
         },
         "keystore_password": {
             "help": "Mot de passe qui sécurisera vos keystores. Vous devrez le saisir de nouveau pour les décrypter quand vous configurerez vos validateurs Proof of Stake. (Il est recommandé de ne pas utiliser cet argument et d'attendre que l'ILC vous demande votre phrase mnémonique, sinon il apparaîtra dans l'historique de votre interpréteur.)",
