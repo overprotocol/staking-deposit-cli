@@ -1,7 +1,7 @@
 from typing import Dict, NamedTuple
 from eth_utils import decode_hex
 
-DEPOSIT_CLI_VERSION = '2.6.1'
+DEPOSIT_CLI_VERSION = '2.7.0'
 
 
 class BaseChainSetting(NamedTuple):
@@ -13,6 +13,7 @@ class BaseChainSetting(NamedTuple):
 MAINNET = 'mainnet'
 OVER = 'over'
 OVER_DOLPHIN = 'over_dolphin'
+OVER_ALPACA_1 = 'over_alpaca_1'
 
 # Mainnet setting (Ethereum Mainnet)
 MainnetSetting = BaseChainSetting(
@@ -26,6 +27,9 @@ OverSetting = BaseChainSetting(
 OverDolphinSetting = BaseChainSetting(
     NETWORK_NAME=OVER_DOLPHIN, GENESIS_FORK_VERSION=bytes.fromhex('00000028'),
     GENESIS_VALIDATORS_ROOT=bytes.fromhex('48353842925cb3ef54869b14c454baf57d106ec9f79bc67d77ba78cc59f70625'))
+OverAlpaca1Setting = BaseChainSetting(
+    NETWORK_NAME=OVER_ALPACA_1, GENESIS_FORK_VERSION=bytes.fromhex('20000089'),
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex('bb2eeb219872516ca0f92f3e7af8a34a7d306438cdedaae99b42a5af9d979156'))
 
 
 
@@ -33,6 +37,7 @@ ALL_CHAINS: Dict[str, BaseChainSetting] = {
     MAINNET: MainnetSetting,
     OVER: OverSetting,
     OVER_DOLPHIN: OverDolphinSetting,
+    OVER_ALPACA_1: OverAlpaca1Setting,
 }
 
 
