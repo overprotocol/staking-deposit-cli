@@ -10,8 +10,8 @@ ZERO_BYTES32 = b'\x00' * 32
 # Execution-spec constants taken from https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/beacon-chain.md
 DOMAIN_DEPOSIT = bytes.fromhex('03000000')
 DOMAIN_BLS_TO_EXECUTION_CHANGE = bytes.fromhex('0A000000')
-BLS_WITHDRAWAL_PREFIX = bytes.fromhex('00')
-ETH1_ADDRESS_WITHDRAWAL_PREFIX = bytes.fromhex('01')
+BLS_WITHDRAWAL_PREFIX = bytes.fromhex('02')
+ETH1_ADDRESS_WITHDRAWAL_PREFIX = bytes.fromhex('02')
 
 ETH2GWEI = 10 ** 9
 # 1 Over
