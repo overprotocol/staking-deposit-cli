@@ -36,7 +36,7 @@ jobs:
           shasum_result=$(sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64)
           echo "shasum_result=${shasum_result}" >> $GITHUB_OUTPUT
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-linux
           path: ./build/linux
