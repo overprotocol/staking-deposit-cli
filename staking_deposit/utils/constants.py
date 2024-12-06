@@ -12,8 +12,8 @@ DOMAIN_DEPOSIT = bytes.fromhex('03000000')
 WITHDRAWAL_PREFIX = bytes.fromhex('00') # Make all withdrawals start with 0x00
 
 ETH2GWEI = 10 ** 9
-# 1 Over
-MIN_DEPOSIT_AMOUNT = 2 ** 0 * ETH2GWEI
+# 32 Over
+MIN_DEPOSIT_AMOUNT = 2 ** 5 * ETH2GWEI
 # 256 Over
 MAX_DEPOSIT_AMOUNT = 2 ** 8 * ETH2GWEI
 
