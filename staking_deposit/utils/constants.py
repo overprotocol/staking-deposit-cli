@@ -9,7 +9,7 @@ ZERO_BYTES32 = b'\x00' * 32
 
 # Execution-spec constants taken from https://github.com/ethereum/consensus-specs/blob/dev/specs/phase0/beacon-chain.md
 DOMAIN_DEPOSIT = bytes.fromhex('03000000')
-WITHDRAWAL_PREFIX = bytes.fromhex('02') # Make all withdrawals start with 0x02
+WITHDRAWAL_PREFIX = bytes.fromhex('00') # Make all withdrawals start with 0x00
 
 ETH2GWEI = 10 ** 9
 # 1 Over
