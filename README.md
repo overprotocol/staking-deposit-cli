@@ -3,63 +3,66 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Introduction](#introduction)
-- [Tutorial for users](#tutorial-for-users)
-  - [Build requirements](#build-requirements)
-  - [For Linux or MacOS users](#for-linux-or-macos-users)
-    - [File Permissions](#file-permissions)
-    - [Option 1. Download binary executable file](#option-1-download-binary-executable-file)
-      - [Step 1. Installation](#step-1-installation)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json)
-        - [`language` Argument](#language-argument)
-        - [`--non_interactive` flag](#--non_interactive-flag)
-        - [Commands](#commands)
-        - [`new-mnemonic` Arguments](#new-mnemonic-arguments)
-        - [`existing-mnemonic` Arguments](#existing-mnemonic-arguments)
-        - [Successful message](#successful-message)
-        - [`generate-bls-to-execution-change` Arguments](#generate-bls-to-execution-change-arguments)
-    - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python)
-      - [Step 0. Python version checking](#step-0-python-version-checking)
-      - [Step 1. Installation](#step-1-installation-1)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-1)
-        - [Language Argument](#language-argument)
-        - [Commands](#commands-1)
-        - [Arguments](#arguments)
-        - [Successful message](#successful-message-1)
-    - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv)
-      - [Step 0. Python version checking](#step-0-python-version-checking-1)
-      - [Step 1. Installation](#step-1-installation-2)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-2)
-        - [Language Argument](#language-argument-1)
-        - [Commands](#commands-2)
-        - [Arguments](#arguments-1)
-  - [For Windows users](#for-windows-users)
-    - [Option 1. Download binary executable file](#option-1-download-binary-executable-file-1)
-      - [Step 1. Installation](#step-1-installation-3)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-4)
-        - [Language Argument](#language-argument-2)
-        - [Commands](#commands-3)
-        - [Arguments](#arguments-3)
-    - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python-1)
-      - [Step 0. Python version checking](#step-0-python-version-checking-2)
-      - [Step 1. Installation](#step-1-installation-4)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
-        - [Language Argument](#language-argument-3)
-        - [Commands](#commands-4)
-        - [Arguments](#arguments-4)
-    - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv-1)
-      - [Step 0. Python version checking](#step-0-python-version-checking-3)
-      - [Step 1. Installation](#step-1-installation-5)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
-        - [Language Argument](#language-argument-4)
-        - [Commands](#commands-5)
-        - [Arguments](#arguments-5)
-- [Development](#development)
-  - [Install basic requirements](#install-basic-requirements)
-  - [Install testing requirements](#install-testing-requirements)
-  - [Run tests](#run-tests)
-  - [Building Binaries](#building-binaries)
-      - [Mac M1 Binaries](#mac-m1-binaries)
+- [staking-deposit-cli: OverProtocol Validator Data Generator](#staking-deposit-cli-overprotocol-validator-data-generator)
+  - [Introduction](#introduction)
+  - [Tutorial for users](#tutorial-for-users)
+    - [Build requirements](#build-requirements)
+    - [For Linux or MacOS users](#for-linux-or-macos-users)
+      - [File Permissions](#file-permissions)
+      - [Option 1. Download binary executable file](#option-1-download-binary-executable-file)
+        - [Step 1. Installation](#step-1-installation)
+        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json)
+          - [`language` Argument](#language-argument)
+          - [`--non_interactive` flag](#--non_interactive-flag)
+          - [Commands](#commands)
+          - [`new-mnemonic` Arguments](#new-mnemonic-arguments)
+          - [`existing-mnemonic` Arguments](#existing-mnemonic-arguments)
+          - [Successful message](#successful-message)
+        - [Step 1. Installation](#step-1-installation-1)
+        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-1)
+          - [Language Argument](#language-argument-1)
+          - [Commands](#commands-1)
+          - [Arguments](#arguments)
+          - [Successful message](#successful-message-1)
+      - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv)
+        - [Step 0. Python version checking](#step-0-python-version-checking)
+        - [Step 1. Installation](#step-1-installation-2)
+        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-2)
+          - [Language Argument](#language-argument-2)
+          - [Commands](#commands-2)
+          - [Arguments](#arguments-1)
+      - [Option 4. Use Docker image](#option-4-use-docker-image)
+        - [Step 1. Build the docker image](#step-1-build-the-docker-image)
+        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-3)
+          - [Arguments](#arguments-2)
+          - [Successful message](#successful-message-2)
+    - [For Windows users](#for-windows-users)
+      - [Option 1. Download binary executable file](#option-1-download-binary-executable-file-1)
+        - [Step 1. Installation](#step-1-installation-3)
+        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-4)
+          - [Language Argument](#language-argument-3)
+          - [Commands](#commands-3)
+          - [Arguments](#arguments-3)
+      - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python)
+        - [Step 0. Python version checking](#step-0-python-version-checking-1)
+        - [Step 1. Installation](#step-1-installation-4)
+        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
+          - [Language Argument](#language-argument-4)
+          - [Commands](#commands-4)
+          - [Arguments](#arguments-4)
+      - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv-1)
+        - [Step 0. Python version checking](#step-0-python-version-checking-2)
+        - [Step 1. Installation](#step-1-installation-5)
+        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
+          - [Language Argument](#language-argument-5)
+          - [Commands](#commands-5)
+          - [Arguments](#arguments-5)
+  - [Development](#development)
+    - [Install basic requirements](#install-basic-requirements)
+    - [Install testing requirements](#install-testing-requirements)
+    - [Run tests](#run-tests)
+    - [Building Binaries](#building-binaries)
+        - [Mac M1 Binaries](#mac-m1-binaries)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -139,7 +142,7 @@ You can use `new-mnemonic --help` to see all arguments. Note that if there are m
 | `--num_validators`                                     | Non-negative integer                                                                                                                  | The number of signing keys you want to generate. Note that the child key(s) are generated via the same master key.                                                                                                                                                                                   |
 | `--mnemonic_language`                                  | String. Options: `简体中文`, `繁體中文`, `český jazyk`, `English`, `Italiano`, `한국어`, `Português`, `Español`. Default to `English` | The language of the mnemonic word list                                                                                                                                                                                                                                                               |
 | `--folder`                                             | String. Pointing to `./validator_keys` by default                                                                                     | The folder path for the keystore(s) and deposit(s)                                                                                                                                                                                                                                                   |
-| `--chain`                                              | String. `over` by default                                                                                                          | The chain setting for the signing domain.                                                                                                                                                                                                                                                            |
+| `--chain`                                              | String. `over` by default                                                                                                             | The chain setting for the signing domain.                                                                                                                                                                                                                                                            |
 | `--execution_address` (or `--eth1_withdrawal_address`) | String. Over address in hexadecimal encoded form                                                                                      | If this field is set and valid, the given Over address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
 
 ###### `existing-mnemonic` Arguments
@@ -151,7 +154,7 @@ You can use `existing-mnemonic --help` to see all arguments. Note that if there 
 | `--validator_start_index`                              | Non-negative integer                              | The index of the first validator's keys you wish to generate. If this is your first time generating keys with this mnemonic, use 0. If you have generated keys using this mnemonic before, use the next index from which you want to start generating keys from (eg, if you've generated 4 keys before (keys #0, #1, #2, #3), then enter 4 here. |
 | `--num_validators`                                     | Non-negative integer                              | The number of new signing keys you want to generate. Note that the child key(s) are generated via the same master key.                                                                                                                                                                                                                           |
 | `--folder`                                             | String. Pointing to `./validator_keys` by default | The folder path for the keystore(s) and deposit(s)                                                                                                                                                                                                                                                                                               |
-| `--chain`                                              | String. `over` by default                      | The chain setting for the signing domain.                                                                                                                                                                                                                                                                                                        |
+| `--chain`                                              | String. `over` by default                         | The chain setting for the signing domain.                                                                                                                                                                                                                                                                                                        |
 | `--execution_address` (or `--eth1_withdrawal_address`) | String. Over address in hexadecimal encoded form  | If this field is set and valid, the given Over address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters).                                             |
 
 ###### Successful message
@@ -167,23 +170,7 @@ Verifying your deposits:          [####################################]  <N>/<N
 
 Success!
 Your keys can be found at: <YOUR_FOLDER_PATH>
-```
-
-###### `generate-bls-to-execution-change` Arguments 
-
-You can use `bls-to-execution-change --help` to see all arguments. Note that if there are missing arguments that the CLI needs, it will ask you for them.
-
-| Argument                                               | Type                                                                                                                                                               | Description                                                                                                                                                                                                                                                                                          |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--bls_to_execution_changes_folder`                    | String. Pointing to `./bls_to_execution_changes` by default                                                                                                        | The folder path for the `bls_to_execution_change-*` JSON file(s)                                                                                                                                                                                                                                     |
-| `--chain`                                              | String. `over` by default                                                                                                                                       | The chain setting for the signing domain.                                                                                                                                                                                                                                                            |
-| `--mnemonic`                                           | String. mnemonic split by space.                                                                                                                                   | The mnemonic you used to create withdrawal credentials.                                                                                                                                                                                                                                              |
-| `--mnemonic_password`                                  | Optional string. Empty by default.                                                                                                                                 | The mnemonic password you used in your key generation. Note: It's not the keystore password.                                                                                                                                                                                                         |
-| `--validator_start_index`                              | Non-negative integer                                                                                                                                               | The index position for the keys to start generating withdrawal credentials in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters).                                                                                                                                   |
-| `--validator_indices`                                  | String of integer(s)                                                                                                                                               | A list of the chosen validator index number(s) as identified on the beacon chain. Split multiple items with whitespaces or commas.                                                                                                                                                                   |
-| `--bls_withdrawal_credentials_list`                    | String of hexstring(s).                                                                                                                                            | A list of the old BLS withdrawal credentials of the given validator(s). It is for confirming you are using the correct keys. Split multiple items with whitespaces or commas.                                                                                                                        |
-| `--execution_address` (or `--eth1_withdrawal_address`) | String. Eth1 address in hexadecimal encoded form                                                                                                                   | If this field is set and valid, the given Eth1 address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
-| `--devnet_chain_setting`                               | String. JSON string `'{"network_name": "<NETWORK_NAME>", "genesis_fork_version": "<GENESIS_FORK_VERSION>", "genesis_validator_root": "<GENESIS_VALIDATOR_ROOT>"}'` | The custom chain setting of a devnet or testnet. Note that it will override your `--chain` choice.                                                                                                                                                                                                   |
+```                                                                                                                                                                                               |
 
 #### Option 2. Build `deposit-cli` with native Python
 
@@ -245,7 +232,6 @@ See [here](#commands)
 
 See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
 See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
 
 ###### Successful message
 See [here](#successful-message)
@@ -313,7 +299,6 @@ See [here](#commands)
 
 See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
 See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
 
 #### Option 4. Use Docker image
 
@@ -397,7 +382,6 @@ See [here](#commands)
 
 See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
 See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
 
 #### Option 2. Build `deposit-cli` with native Python
 
@@ -460,7 +444,6 @@ See [here](#commands)
 
 See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
 See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
 
 #### Option 3. Build `deposit-cli` with `virtualenv`
 
@@ -525,7 +508,6 @@ See [here](#commands)
 
 See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
 See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
 
 ## Development
 
