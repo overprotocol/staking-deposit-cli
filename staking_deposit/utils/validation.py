@@ -14,10 +14,8 @@ from py_ecc.bls import G2ProofOfPossession as bls
 from staking_deposit.exceptions import ValidationError
 from staking_deposit.utils.intl import load_text
 from staking_deposit.utils.ssz import (
-    BLSToExecutionChange,
     DepositData,
     DepositMessage,
-    compute_bls_to_execution_change_domain,
     compute_deposit_domain,
     compute_signing_root,
 )
@@ -136,75 +134,6 @@ def validate_eth1_withdrawal_address(cts: click.Context, param: Any, address: st
     click.echo('\n%s\n' % load_text(['msg_ECDSA_hex_addr_withdrawal']))
     return normalized_address
 
-#
-# BLSToExecutionChange
-#
-
-
-def verify_bls_to_execution_change_json(filefolder: str,
-                                        credentials: Sequence[Credential],
-                                        *,
-                                        input_validator_indices: Sequence[int],
-                                        input_execution_address: str,
-                                        chain_setting: BaseChainSetting) -> bool:
-    """
-    Validate every BLSToExecutionChange found in the bls_to_execution_change JSON file folder.
-    """
-    with open(filefolder, 'r') as f:
-        btec_json = json.load(f)
-        with click.progressbar(btec_json, label=load_text(['msg_bls_to_execution_change_verification']),
-                               show_percent=False, show_pos=True) as btecs:
-            return all([
-                validate_bls_to_execution_change(
-                    btec, credential,
-                    input_validator_index=input_validator_index,
-                    input_execution_address=input_execution_address,
-                    chain_setting=chain_setting)
-                for btec, credential, input_validator_index in zip(btecs, credentials, input_validator_indices)
-            ])
-    return False
-
-
-def validate_bls_to_execution_change(btec_dict: Dict[str, Any],
-                                     credential: Credential,
-                                     *,
-                                     input_validator_index: int,
-                                     input_execution_address: str,
-                                     chain_setting: BaseChainSetting) -> bool:
-    validator_index = int(btec_dict['message']['validator_index'])
-    from_bls_pubkey = BLSPubkey(decode_hex(btec_dict['message']['from_bls_pubkey']))
-    to_execution_address = decode_hex(btec_dict['message']['to_execution_address'])
-    signature = BLSSignature(decode_hex(btec_dict['signature']))
-    genesis_validators_root = decode_hex(btec_dict['metadata']['genesis_validators_root'])
-
-    if validator_index != input_validator_index:
-        return False
-    if from_bls_pubkey != credential.withdrawal_pk:
-        return False
-    if (
-        to_execution_address != credential.eth1_withdrawal_address
-        or to_execution_address != decode_hex(input_execution_address)
-    ):
-        return False
-    if genesis_validators_root != chain_setting.GENESIS_VALIDATORS_ROOT:
-        return False
-
-    message = BLSToExecutionChange(
-        validator_index=validator_index,
-        from_bls_pubkey=from_bls_pubkey,
-        to_execution_address=to_execution_address,
-    )
-    domain = compute_bls_to_execution_change_domain(
-        fork_version=chain_setting.GENESIS_FORK_VERSION,
-        genesis_validators_root=genesis_validators_root,
-    )
-    signing_root = compute_signing_root(message, domain)
-
-    if not bls.Verify(BLSPubkey(credential.withdrawal_pk), signing_root, signature):
-        return False
-
-    return True
-
 
 def normalize_bls_withdrawal_credentials_to_bytes(bls_withdrawal_credentials: str) -> bytes:
     if bls_withdrawal_credentials.startswith('0x'):
@@ -248,19 +177,3 @@ def normalize_input_list(input: str) -> Sequence[str]:
     except Exception:
         raise ValidationError(load_text(['err_incorrect_list']) + '\n')
     return result
-
-
-def validate_bls_withdrawal_credentials_list(input_bls_withdrawal_credentials_list: str) -> Sequence[bytes]:
-    bls_withdrawal_credentials_list = normalize_input_list(input_bls_withdrawal_credentials_list)
-    return [validate_bls_withdrawal_credentials(cred) for cred in bls_withdrawal_credentials_list]
-
-
-def validate_validator_indices(input_validator_indices: str) -> Sequence[int]:
-
-    normalized_list = normalize_input_list(input_validator_indices)
-    return [validate_int_range(int(index), 0, 2**32) for index in normalized_list]
-
-
-def validate_bls_withdrawal_credentials_matching(bls_withdrawal_credentials: bytes, credential: Credential) -> None:
-    if bls_withdrawal_credentials[1:] != SHA256(credential.withdrawal_pk)[1:]:
-        raise ValidationError(load_text(['err_not_matching']) + '\n')
