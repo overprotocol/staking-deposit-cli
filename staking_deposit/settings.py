@@ -21,11 +21,11 @@ MainnetSetting = BaseChainSetting(
 # Over Setting
 OverSetting = BaseChainSetting(
     NETWORK_NAME=OVER, GENESIS_FORK_VERSION=bytes.fromhex('00000018'),
-    GENESIS_VALIDATORS_ROOT=bytes.fromhex('632a76efc7571a6b21a29156dec3ede1647cf6832f11b4a14b5a1f00b2a4d67e'))
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex('0000000000000000000000000000000000000000000000000000000000000000')) # TODO: Update GVR
 # Over Dolphin Setting
 OverDolphinSetting = BaseChainSetting(
     NETWORK_NAME=OVER_DOLPHIN, GENESIS_FORK_VERSION=bytes.fromhex('00000028'),
-    GENESIS_VALIDATORS_ROOT=bytes.fromhex('48353842925cb3ef54869b14c454baf57d106ec9f79bc67d77ba78cc59f70625'))
+    GENESIS_VALIDATORS_ROOT=bytes.fromhex('9827ccaceeee4a16f78091d3ce4dce4e45d7c6d2793e571e8b59dcaff3d1804f'))
 
 
 
