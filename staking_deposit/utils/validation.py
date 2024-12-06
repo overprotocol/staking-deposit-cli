@@ -8,7 +8,7 @@ from eth_typing import (
     BLSSignature,
     HexAddress,
 )
-from eth_utils import is_hex_address, is_checksum_address, to_normalized_address, decode_hex
+from eth_utils import is_hex_address, is_checksum_address, to_normalized_address
 from py_ecc.bls import G2ProofOfPossession as bls
 
 from staking_deposit.exceptions import ValidationError
@@ -25,8 +25,7 @@ from staking_deposit.credentials import (
 from staking_deposit.utils.constants import (
     MAX_DEPOSIT_AMOUNT,
     MIN_DEPOSIT_AMOUNT,
-    BLS_WITHDRAWAL_PREFIX,
-    ETH1_ADDRESS_WITHDRAWAL_PREFIX,
+    WITHDRAWAL_PREFIX,
 )
 from staking_deposit.utils.crypto import SHA256
 from staking_deposit.settings import BaseChainSetting
@@ -69,10 +68,7 @@ def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential) 
     # Verify withdrawal credential
     if len(withdrawal_credentials) != 32:
         return False
-    if withdrawal_credentials[:1] == BLS_WITHDRAWAL_PREFIX == credential.withdrawal_prefix:
-        if withdrawal_credentials[1:] != SHA256(credential.withdrawal_pk)[1:]:
-            return False
-    elif withdrawal_credentials[:1] == ETH1_ADDRESS_WITHDRAWAL_PREFIX == credential.withdrawal_prefix:
+    if withdrawal_credentials[:1] == WITHDRAWAL_PREFIX == credential.withdrawal_prefix:
         if withdrawal_credentials[1:12] != b'\x00' * 11:
             return False
         if credential.eth1_withdrawal_address is None:
@@ -131,42 +127,15 @@ def validate_eth1_withdrawal_address(cts: click.Context, param: Any, address: st
         raise ValidationError(load_text(['err_invalid_ECDSA_hex_addr_checksum']))
 
     normalized_address = to_normalized_address(address)
-    click.echo('\n%s\n' % load_text(['msg_ECDSA_hex_addr_withdrawal']))
     return normalized_address
-
-
-def normalize_bls_withdrawal_credentials_to_bytes(bls_withdrawal_credentials: str) -> bytes:
-    if bls_withdrawal_credentials.startswith('0x'):
-        bls_withdrawal_credentials = bls_withdrawal_credentials[2:]
-
-    try:
-        bls_withdrawal_credentials_bytes = bytes.fromhex(bls_withdrawal_credentials)
-    except Exception:
-        raise ValidationError(load_text(['err_incorrect_hex_form']) + '\n')
-    return bls_withdrawal_credentials_bytes
 
 
 def is_eth1_address_withdrawal_credentials(withdrawal_credentials: bytes) -> bool:
     return (
         len(withdrawal_credentials) == 32
-        and withdrawal_credentials[:1] == ETH1_ADDRESS_WITHDRAWAL_PREFIX
+        and withdrawal_credentials[:1] == WITHDRAWAL_PREFIX
         and withdrawal_credentials[1:12] == b'\x00' * 11
     )
-
-
-def validate_bls_withdrawal_credentials(bls_withdrawal_credentials: str) -> bytes:
-    bls_withdrawal_credentials_bytes = normalize_bls_withdrawal_credentials_to_bytes(bls_withdrawal_credentials)
-
-    if is_eth1_address_withdrawal_credentials(bls_withdrawal_credentials_bytes):
-        raise ValidationError(load_text(['err_is_already_eth1_form']) + '\n')
-
-    try:
-        assert len(bls_withdrawal_credentials_bytes) == 32
-        assert bls_withdrawal_credentials_bytes[:1] == BLS_WITHDRAWAL_PREFIX
-    except (ValueError, AssertionError):
-        raise ValidationError(load_text(['err_not_bls_form']) + '\n')
-
-    return bls_withdrawal_credentials_bytes
 
 
 def normalize_input_list(input: str) -> Sequence[str]:

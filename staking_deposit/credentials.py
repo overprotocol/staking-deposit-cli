@@ -17,8 +17,7 @@ from staking_deposit.key_handling.keystore import (
 )
 from staking_deposit.settings import DEPOSIT_CLI_VERSION, BaseChainSetting
 from staking_deposit.utils.constants import (
-    BLS_WITHDRAWAL_PREFIX,
-    ETH1_ADDRESS_WITHDRAWAL_PREFIX,
+    WITHDRAWAL_PREFIX,
     ETH2GWEI,
     MAX_DEPOSIT_AMOUNT,
     MIN_DEPOSIT_AMOUNT,
@@ -31,11 +30,6 @@ from staking_deposit.utils.ssz import (
     DepositData,
     DepositMessage,
 )
-
-
-class WithdrawalType(Enum):
-    BLS_WITHDRAWAL = 0
-    ETH1_ADDRESS_WITHDRAWAL = 1
 
 
 class Credential:
@@ -78,34 +72,14 @@ class Credential:
 
     @property
     def withdrawal_prefix(self) -> bytes:
-        if self.eth1_withdrawal_address is not None:
-            return ETH1_ADDRESS_WITHDRAWAL_PREFIX
-        else:
-            return BLS_WITHDRAWAL_PREFIX
-
-    @property
-    def withdrawal_type(self) -> WithdrawalType:
-        if self.withdrawal_prefix == BLS_WITHDRAWAL_PREFIX:
-            return WithdrawalType.BLS_WITHDRAWAL
-        elif self.withdrawal_prefix == ETH1_ADDRESS_WITHDRAWAL_PREFIX:
-            return WithdrawalType.ETH1_ADDRESS_WITHDRAWAL
-        else:
-            raise ValueError(f"Invalid withdrawal_prefix {self.withdrawal_prefix.hex()}")
+        return WITHDRAWAL_PREFIX
 
     @property
     def withdrawal_credentials(self) -> bytes:
-        if self.withdrawal_type == WithdrawalType.BLS_WITHDRAWAL:
-            withdrawal_credentials = BLS_WITHDRAWAL_PREFIX
-            withdrawal_credentials += SHA256(self.withdrawal_pk)[1:]
-        elif (
-            self.withdrawal_type == WithdrawalType.ETH1_ADDRESS_WITHDRAWAL
-            and self.eth1_withdrawal_address is not None
-        ):
-            withdrawal_credentials = ETH1_ADDRESS_WITHDRAWAL_PREFIX
-            withdrawal_credentials += b'\x00' * 11
-            withdrawal_credentials += self.eth1_withdrawal_address
-        else:
-            raise ValueError(f"Invalid withdrawal_type {self.withdrawal_type}")
+        withdrawal_credentials = WITHDRAWAL_PREFIX
+        withdrawal_credentials += b'\x00' * 11
+        withdrawal_credentials += self.eth1_withdrawal_address
+
         return withdrawal_credentials
 
     @property
