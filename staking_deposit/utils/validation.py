@@ -120,7 +120,7 @@ def validate_int_range(num: Any, low: int, high: int) -> int:
 
 def validate_deposit_amount(amount: Any) -> int:
     '''
-    Verifies that `amount` is an `int` (in Over) and MIN_DEPOSIT_AMOUNT <= amount < MAX_DEPOSIT_AMOUNT
+    Verifies that `amount` is an `int` (in Over) and MIN_DEPOSIT_AMOUNT <= amount (in gwei) < MAX_DEPOSIT_AMOUNT
     '''
     try:
         amount_in_over = int(amount)  # Try cast to int
