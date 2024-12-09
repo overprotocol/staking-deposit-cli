@@ -120,14 +120,14 @@ def validate_int_range(num: Any, low: int, high: int) -> int:
 
 def validate_deposit_amount(amount: Any) -> int:
     '''
-    Verifies that `amount` is an `int` and MIN_DEPOSIT_AMOUNT <= num < MAX_DEPOSIT_AMOUNT
+    Verifies that `amount` is an `int` (in Over) and MIN_DEPOSIT_AMOUNT <= amount < MAX_DEPOSIT_AMOUNT
     '''
     try:
-        amount_int = int(amount)  # Try cast to int
-        assert amount_int == float(amount)  # Check amount is not float
-        amount_int_in_gwei = amount_int * ETH2GWEI
+        amount_in_over = int(amount)  # Try cast to int
+        assert amount_in_over == float(amount)  # Check amount is not float
+        amount_int_in_gwei = amount_in_over * ETH2GWEI
         assert MIN_DEPOSIT_AMOUNT <= amount_int_in_gwei <= MAX_DEPOSIT_AMOUNT  # Check amount in range
-        return amount_int
+        return amount_in_over
     except (ValueError, AssertionError):
         raise ValidationError(load_text(['err_not_valid_deposit_amount']))
 
