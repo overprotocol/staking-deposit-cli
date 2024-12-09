@@ -14,8 +14,8 @@ WITHDRAWAL_PREFIX = bytes.fromhex('00') # Make all withdrawals start with 0x00
 ETH2GWEI = 10 ** 9
 # 32 Over
 MIN_DEPOSIT_AMOUNT = 2 ** 5 * ETH2GWEI
-# 256 Over
-MAX_DEPOSIT_AMOUNT = 2 ** 8 * ETH2GWEI
+# 16,384 Over
+MAX_DEPOSIT_AMOUNT = 2 ** 14 * ETH2GWEI
 
 
 # File/folder constants
