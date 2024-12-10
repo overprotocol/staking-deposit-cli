@@ -25,6 +25,7 @@ from staking_deposit.credentials import (
 from staking_deposit.utils.constants import (
     MAX_DEPOSIT_AMOUNT,
     MIN_DEPOSIT_AMOUNT,
+    ETH2GWEI,
     WITHDRAWAL_PREFIX,
 )
 from staking_deposit.utils.crypto import SHA256
@@ -79,7 +80,7 @@ def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential) 
         return False
 
     # Verify deposit amount
-    if not MIN_DEPOSIT_AMOUNT < amount <= MAX_DEPOSIT_AMOUNT:
+    if not MIN_DEPOSIT_AMOUNT <= amount <= MAX_DEPOSIT_AMOUNT:
         return False
 
     # Verify deposit signature && pubkey
@@ -116,6 +117,19 @@ def validate_int_range(num: Any, low: int, high: int) -> int:
         return num_int
     except (ValueError, AssertionError):
         raise ValidationError(load_text(['err_not_positive_integer']))
+
+def validate_deposit_amount(amount: Any) -> int:
+    '''
+    Verifies that `amount` is an `int` (in Over) and MIN_DEPOSIT_AMOUNT <= amount (in gwei) < MAX_DEPOSIT_AMOUNT
+    '''
+    try:
+        amount_in_over = int(amount)  # Try cast to int
+        assert amount_in_over == float(amount)  # Check amount is not float
+        amount_int_in_gwei = amount_in_over * ETH2GWEI
+        assert MIN_DEPOSIT_AMOUNT <= amount_int_in_gwei <= MAX_DEPOSIT_AMOUNT  # Check amount in range
+        return amount_in_over
+    except (ValueError, AssertionError):
+        raise ValidationError(load_text(['err_not_valid_deposit_amount']))
 
 
 def validate_eth1_withdrawal_address(cts: click.Context, param: Any, address: str) -> HexAddress:

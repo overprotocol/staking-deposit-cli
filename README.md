@@ -18,6 +18,8 @@
           - [`new-mnemonic` Arguments](#new-mnemonic-arguments)
           - [`existing-mnemonic` Arguments](#existing-mnemonic-arguments)
           - [Successful message](#successful-message)
+      - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python)
+        - [Step 0. Python version checking](#step-0-python-version-checking)
         - [Step 1. Installation](#step-1-installation-1)
         - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-1)
           - [Language Argument](#language-argument-1)
@@ -25,7 +27,7 @@
           - [Arguments](#arguments)
           - [Successful message](#successful-message-1)
       - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv)
-        - [Step 0. Python version checking](#step-0-python-version-checking)
+        - [Step 0. Python version checking](#step-0-python-version-checking-1)
         - [Step 1. Installation](#step-1-installation-2)
         - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-2)
           - [Language Argument](#language-argument-2)
@@ -43,15 +45,15 @@
           - [Language Argument](#language-argument-3)
           - [Commands](#commands-3)
           - [Arguments](#arguments-3)
-      - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python)
-        - [Step 0. Python version checking](#step-0-python-version-checking-1)
+      - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python-1)
+        - [Step 0. Python version checking](#step-0-python-version-checking-2)
         - [Step 1. Installation](#step-1-installation-4)
         - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
           - [Language Argument](#language-argument-4)
           - [Commands](#commands-4)
           - [Arguments](#arguments-4)
       - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv-1)
-        - [Step 0. Python version checking](#step-0-python-version-checking-2)
+        - [Step 0. Python version checking](#step-0-python-version-checking-3)
         - [Step 1. Installation](#step-1-installation-5)
         - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
           - [Language Argument](#language-argument-5)
@@ -144,18 +146,20 @@ You can use `new-mnemonic --help` to see all arguments. Note that if there are m
 | `--folder`                                             | String. Pointing to `./validator_keys` by default                                                                                     | The folder path for the keystore(s) and deposit(s)                                                                                                                                                                                                                                                   |
 | `--chain`                                              | String. `over` by default                                                                                                             | The chain setting for the signing domain.                                                                                                                                                                                                                                                            |
 | `--execution_address` (or `--eth1_withdrawal_address`) | String. Over address in hexadecimal encoded form                                                                                      | If this field is set and valid, the given Over address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
+| `--deposit_amount`                                     | Integer between `MIN_DEPOSIT_AMOUNT` and `MAX_DEPOSIT_AMOUNT` (256 ~ 16,384)                                                          | If this field is set and valid, the given deposit amount will be used to create the deposit data.                                                                                                                                                                                                    |
 
 ###### `existing-mnemonic` Arguments
 
 You can use `existing-mnemonic --help` to see all arguments. Note that if there are missing arguments that the CLI needs, it will ask you for them.
 
-| Argument                                               | Type                                              | Description                                                                                                                                                                                                                                                                                                                                      |
-| ------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--validator_start_index`                              | Non-negative integer                              | The index of the first validator's keys you wish to generate. If this is your first time generating keys with this mnemonic, use 0. If you have generated keys using this mnemonic before, use the next index from which you want to start generating keys from (eg, if you've generated 4 keys before (keys #0, #1, #2, #3), then enter 4 here. |
-| `--num_validators`                                     | Non-negative integer                              | The number of new signing keys you want to generate. Note that the child key(s) are generated via the same master key.                                                                                                                                                                                                                           |
-| `--folder`                                             | String. Pointing to `./validator_keys` by default | The folder path for the keystore(s) and deposit(s)                                                                                                                                                                                                                                                                                               |
-| `--chain`                                              | String. `over` by default                         | The chain setting for the signing domain.                                                                                                                                                                                                                                                                                                        |
-| `--execution_address` (or `--eth1_withdrawal_address`) | String. Over address in hexadecimal encoded form  | If this field is set and valid, the given Over address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters).                                             |
+| Argument                                               | Type                                                                         | Description                                                                                                                                                                                                                                                                                                                                      |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--validator_start_index`                              | Non-negative integer                                                         | The index of the first validator's keys you wish to generate. If this is your first time generating keys with this mnemonic, use 0. If you have generated keys using this mnemonic before, use the next index from which you want to start generating keys from (eg, if you've generated 4 keys before (keys #0, #1, #2, #3), then enter 4 here. |
+| `--num_validators`                                     | Non-negative integer                                                         | The number of new signing keys you want to generate. Note that the child key(s) are generated via the same master key.                                                                                                                                                                                                                           |
+| `--folder`                                             | String. Pointing to `./validator_keys` by default                            | The folder path for the keystore(s) and deposit(s)                                                                                                                                                                                                                                                                                               |
+| `--chain`                                              | String. `over` by default                                                    | The chain setting for the signing domain.                                                                                                                                                                                                                                                                                                        |
+| `--execution_address` (or `--eth1_withdrawal_address`) | String. Over address in hexadecimal encoded form                             | If this field is set and valid, the given Over address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters).                                             |
+| `--deposit_amount`                                     | Integer between `MIN_DEPOSIT_AMOUNT` and `MAX_DEPOSIT_AMOUNT` (256 ~ 16,384) | If this field is set and valid, the given deposit amount will be used to create the deposit data.                                                                                                                                                                                                                                                |
 
 ###### Successful message
 
@@ -170,7 +174,7 @@ Verifying your deposits:          [####################################]  <N>/<N
 
 Success!
 Your keys can be found at: <YOUR_FOLDER_PATH>
-```                                                                                                                                                                                               |
+```                                                                                                                                                                                               
 
 #### Option 2. Build `deposit-cli` with native Python
 
